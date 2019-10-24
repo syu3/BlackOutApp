@@ -16,9 +16,10 @@ import NotificationCenter
 import UserNotificationsUI
 import UserNotifications
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,UNUserNotificationCenterDelegate {
-    
+    //test
     //自分の家が今停電していないのに、アプリ上の状況を「停電した」としている方は、「電気がついている」ボタンを押して状況を変更してください。よろしくお願いします。
     var lat = ""
+    
     var lon = ""
     var situationNum = 0
     var interstitial: GADInterstitial!
