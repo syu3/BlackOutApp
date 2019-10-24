@@ -20,11 +20,11 @@ class DeleteViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func delete(){
-        let data = ["Situation": "aa"]
-        DBRef.child("data/")..updateChildValues(data)
-
-    }
+//    @IBAction func delete(){
+//        let data = ["Situation": "aa"]
+//        DBRef.child("data/")..updateChildValues(data)
+//
+//    }
     /*
     // MARK: - Navigation
 
