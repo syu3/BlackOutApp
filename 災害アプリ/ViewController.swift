@@ -35,9 +35,12 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     var ref: DatabaseReference!
     var addpinnum = -1
     var situationDictionary: [String: String] = [:]
+    var grayNum = 0
     //    @IBOutlet var myMapView:MKMapView!
-    
+    var arrayCount = 0
+    var zissaiCount = 0
     @IBOutlet weak var myMapView: MKMapView!
+    @IBOutlet var grayNumLabel : UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -111,14 +114,15 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             ref = Database.database().reference()
             ref.child("data").observe(.childChanged, with: { [weak self](snapshot) -> Void in
                 self?.num = (self?.num)! + 1
-                print("a",snapshot)
-                print("b",snapshot.childSnapshot)
+//                print("a",snapshot)
+//                print("b",snapshot.childSnapshot)
                 let storePlace = String(describing: snapshot.childSnapshot(forPath: "userPlace").value!)
-                print("faf",snapshot.childSnapshot(forPath: "userPlace").value!)
+//                print("faf",snapshot.childSnapshot(forPath: "userPlace").value!)
                 let SituationFir = String(describing: snapshot.childSnapshot(forPath: "Situation").value!)
-                print("こんにちは",SituationFir)
+//                print("こんにちは",SituationFir)
                 self?.situationArray.append(SituationFir)
                 self?.situationDictionary[storePlace] = SituationFir
+                
                 self?.situationNum = 1
                 //                for i in (self?.situationArray)! {
                 //                    print("iは、",i)
@@ -132,23 +136,23 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 // ピンを生成.
                 let myPin: MKPointAnnotation = MKPointAnnotation()
                 // 座標を設定.
-                print("mmmmm")
+//                print("mmmmm")
                 myPin.coordinate = CLLocationCoordinate2DMake(Double(storePlace.components(separatedBy: "|")[0])!, Double(storePlace.components(separatedBy: "|")[1])!)
                 // タイトルを設定.
                 myPin.title = SituationFir
-                print("fawefa",myPin)
+//                print("fawefa",myPin)
                 // MapViewにピンを追加.
                 self?.myMapView.addAnnotation(myPin)
                 
             })
             ref.child("data").observe(.childAdded, with: { [weak self](snapshot) -> Void in
                 self?.num = (self?.num)! + 1
-                print("a",snapshot)
-                print("b",snapshot.childSnapshot)
+//                print("a",snapshot)
+//                print("b",snapshot.childSnapshot)
                 let storePlace = String(describing: snapshot.childSnapshot(forPath: "userPlace").value!)
-                print("faf",snapshot.childSnapshot(forPath: "userPlace").value!)
+//                print("faf",snapshot.childSnapshot(forPath: "userPlace").value!)
                 let SituationFir = String(describing: snapshot.childSnapshot(forPath: "Situation").value!)
-                print("こんにちは",SituationFir)
+//                print("こんにちは",SituationFir)
                 self?.situationArray.append(SituationFir)
                 self?.situationDictionary[storePlace] = SituationFir
                 self?.situationNum = 1
@@ -164,11 +168,11 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 // ピンを生成.
                 let myPin: MKPointAnnotation = MKPointAnnotation()
                 // 座標を設定.
-                print("mmmmm")
+//                print("mmmmm")
                 myPin.coordinate = CLLocationCoordinate2DMake(Double(storePlace.components(separatedBy: "|")[0])!, Double(storePlace.components(separatedBy: "|")[1])!)
                 // タイトルを設定.
                 myPin.title = SituationFir
-                print("fawefa",myPin)
+//                print("fawefa",myPin)
                 // MapViewにピンを追加.
                 self!.myMapView.addAnnotation(myPin)
                 
@@ -177,6 +181,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             var openNum = UserDefaults.standard.integer(forKey: "openNum")
             openNum = openNum + 1
             UserDefaults.standard.set(1, forKey: "openNum")
+            
         }else{
         }
         if(UserDefaults.standard.integer(forKey: "openNum") != 0){
@@ -211,6 +216,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                         print("abc",aa)
                     }
                 }
+//
             }
         }else{
             
@@ -370,21 +376,23 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
+        arrayCount = situationDictionary.count
+//        print("arrayCount",arrayCount)
         if(situationNum == 1){
             addpinnum = addpinnum + 1
-            print("じゃない")
+//            print("じゃない")
             let myIdentifier = "myPin"
             
             var myAnnotation: MKAnnotationView!
-            
+            zissaiCount += 1
+//            print("zissaiCount",zissaiCount)
             // annotationが見つからなかったら新しくannotationを生成.
             if myAnnotation == nil {
                 myAnnotation = MKAnnotationView(annotation: annotation, reuseIdentifier: myIdentifier)
-                print("ファwフェアおgじゃおいwgホイあfヘアいうwfハオfじゃおいウェア",annotation.coordinate.latitude)
+//                print("ファwフェアおgじゃおいwgホイあfヘアいうwfハオfじゃおいウェア",annotation.coordinate.latitude)
             }
-            print("situationArrayは,",situationArray)
-            print("situationArray[addpinnum]は,",situationDictionary[String(annotation.coordinate.latitude) + "|" + String(annotation.coordinate.longitude)])
+//            print("situationArrayは,",situationArray)
+//            print("situationArray[addpinnum]は,",situationDictionary[String(annotation.coordinate.latitude) + "|" + String(annotation.coordinate.longitude)])
             if(situationDictionary[String(annotation.coordinate.latitude) + "|" + String(annotation.coordinate.longitude)] == "aa"){
                 // 画像を選択.
                 myAnnotation.image = UIImage(named: "white.png")!
@@ -394,7 +402,16 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             }else if(situationDictionary[String(annotation.coordinate.latitude) + "|" + String(annotation.coordinate.longitude)] == "no"){
                 // 画像を選択.
                 myAnnotation.image = UIImage(named: "gray.png")!
+                grayNum = grayNum + 1
+
+                
+                
             }
+            if(arrayCount == zissaiCount){
+                print("ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー")
+                grayNumLabel.text = "停電数：" + String(grayNum)
+            }
+            
             myAnnotation.annotation = annotation
             
             return myAnnotation
@@ -417,11 +434,14 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             }else if(situation == 2){
                 // 画像を選択.
                 myAnnotation.image = UIImage(named: "gray.png")!
+                grayNum = grayNum + 1
+                
             }
             myAnnotation.annotation = annotation
-            
+
             return myAnnotation
         }
+        
     }
     
     
